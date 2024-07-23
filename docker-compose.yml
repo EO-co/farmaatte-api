@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  farmaatte-api:
+    image: farmaatte-api
+    build:
+      context: . 
+      dockerfile: ./Dockerfile
+    container_name: farmaatte-api
+    ports:
+      - 8080:8080
+networks:
+  farmaatte-net:
+    name: farmaatte-net
+    external: true
