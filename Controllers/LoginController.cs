@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace farmaatte_api.Controllers;
 
-[Route("api/[controller]")]
-public class LoginController : ControllerBase
+[Route("[controller]")]
+public class LoginController : V1ControllerBase
 {
 
     private readonly ILogger<LoginController> _logger;

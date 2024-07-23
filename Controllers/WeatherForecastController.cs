@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace farmaatte_api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class WeatherForecastController : ControllerBase
+[Route("[controller]")]
+public class WeatherForecastController : V1ControllerBase
 {
     private static readonly string[] Summaries = new[]
     {
