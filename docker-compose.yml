@@ -9,9 +9,10 @@ services:
     container_name: farmaatte-api
     ports:
       - 2097:2097
-      - 8080:8080
+      - 2098:2098
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=2098
 networks:
   farmaatte-net:
     name: farmaatte-net

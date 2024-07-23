@@ -2,7 +2,10 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /App
 
 EXPOSE 2097
-EXPOSE 8080
+EXPOSE 2098
+
+ENV ASPNETCORE_URLS=http://+:2097;https://+:2098
+
 
 # Copy everything
 COPY . ./
