@@ -8,7 +8,14 @@ services:
       dockerfile: ./Dockerfile
     container_name: farmaatte-api
     ports:
-      - 8080:8080
+      - 2097:2097
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTPS_PORT=https://+:2097
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=paral123
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ~/.aspnet/https:/https:ro
 networks:
   farmaatte-net:
     name: farmaatte-net
