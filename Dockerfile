@@ -4,7 +4,7 @@ WORKDIR /App
 EXPOSE 2097
 EXPOSE 2098
 
-ENV ASPNETCORE_URLS=http://+:2097;https://+:2098
+ENV ASPNETCORE_URLS=http://+:2098;
 
 
 # Copy everything

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace farmaatte_api.Controllers;
 
-[Route("[controller]")]
+[Route("api/v1/[controller]")]
 public class LoginController : V1ControllerBase
 {
 

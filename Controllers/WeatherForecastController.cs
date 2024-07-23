@@ -2,9 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace farmaatte_api.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class WeatherForecastController : V1ControllerBase
+[Route("api/v1/weatherforecast")]
+public class WeatherForecastController : ControllerBase
 {
     private static readonly string[] Summaries = new[]
     {
