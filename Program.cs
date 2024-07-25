@@ -16,6 +16,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// We don't use this, since this is handled by nginx
 // app.UseHttpsRedirection();
 
 app.UseAuthorization();
