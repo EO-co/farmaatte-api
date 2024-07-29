@@ -17,6 +17,8 @@ public partial class User
 
     public int Groupid { get; set; }
 
+    public string Salt { get; set; } = null!;
+
     public virtual Group Group { get; set; } = null!;
 
     public virtual ICollection<Profilepicture> Profilepictures { get; set; } = new List<Profilepicture>();

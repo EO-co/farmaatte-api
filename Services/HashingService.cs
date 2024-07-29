@@ -7,9 +7,10 @@ public class HashingService
 
     public HashingService() { }
 
-    public string HashString(string s)
+    public string HashPasswordString(string s, string salt)
     {
         // Do some stuff
+
         return "";
     }
 }

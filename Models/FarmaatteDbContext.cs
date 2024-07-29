@@ -27,7 +27,6 @@ public partial class FarmaatteDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
-    // Connection string here! Now we just need to implement .env files!
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING"));
 
@@ -132,6 +131,7 @@ public partial class FarmaatteDbContext : DbContext
                 .HasMaxLength(64)
                 .IsFixedLength()
                 .HasColumnName("pwhash");
+            entity.Property(e => e.Salt).HasColumnName("salt");
             entity.Property(e => e.Username).HasColumnName("username");
 
             entity.HasOne(d => d.Group).WithMany(p => p.Users)
