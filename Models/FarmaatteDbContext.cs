@@ -29,7 +29,7 @@ public partial class FarmaatteDbContext : DbContext
 
     // Connection string here! Now we just need to implement .env files!
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql("Host=http://postgres:5432;Database=farmaatte_db;username=myuser;Password=mypassword");
+        => optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

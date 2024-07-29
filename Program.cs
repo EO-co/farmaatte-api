@@ -10,7 +10,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<FarmaatteDbContext>(options => options.UseNpgsql("Host=http://postgres:5432;Database=farmaatte_db;username=myuser;Password=mypassword"));
+var connectionstring = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+
+builder.Services.AddDbContext<FarmaatteDbContext>(options => options.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING")));
 
 var app = builder.Build();
 
