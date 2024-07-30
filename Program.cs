@@ -62,6 +62,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(MyAllowSpecificOrigins);
+
 // We don't use this, since this is handled by nginx
 // app.UseHttpsRedirection();
 
