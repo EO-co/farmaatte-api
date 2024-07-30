@@ -61,12 +61,13 @@ public class LoginController : V1ControllerBase
                     expires: expiration,
                     signingCredentials: credentials);
                 var token = new JwtSecurityTokenHandler().WriteToken(secToken);
-                LoginSucceededDTO returnDto = new LoginSucceededDTO(token, ((DateTimeOffset)expiration).ToUnixTimeMilliseconds(), user.Userid);
+                LoginSucceededDTO returnDto = new(token, ((DateTimeOffset)expiration).ToUnixTimeMilliseconds(), user.Userid);
                 return Ok(returnDto);
             }
         }
     }
 
+    [AllowAnonymous]
     [HttpPost]
     [Consumes("application/json")]
     [Produces("application/json")]

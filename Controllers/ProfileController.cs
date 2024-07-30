@@ -1,6 +1,9 @@
 
 using farmaatte_api.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace farmaatte_api.Controllers;
@@ -17,13 +20,58 @@ public class ProfileController : V1ControllerBase
         _context = context;
         _logger = logger;
     }
-
-    [HttpGet]
+    [Authorize]
+    [HttpGet("group/{id}")]
     [Consumes("application/json")]
     [Produces("application/json")]
-    public IActionResult GetProfileData()
+    public async Task<IActionResult> GetProfileDataOfGroup(int id)
     {
-
-        return Ok();
+        var profilesInGroup = await _context.Users.Where(x => x.Groupid == id).ToListAsync();
+        return Ok(profilesInGroup);
     }
+
+    [Authorize]
+    [HttpGet("{id}")]
+    [Consumes("application/json")]
+    [Produces("application/json")]
+    public async Task<IActionResult> GetProfile(int id)
+    {
+        var profile = await _context.Users.FindAsync(id);
+        return Ok(profile);
+    }
+
+    [AllowAnonymous]
+    [HttpPost("picture/{id}")]
+    public async Task<IActionResult> SaveProfilePicture([FromRoute] int id, [FromForm] IFormFile picture)
+    {
+        if (picture.Length > 0)
+        {
+            using (var ms = new MemoryStream())
+            {
+                picture.CopyTo(ms);
+                var filebytes = ms.ToArray();
+
+                var NewPicture = new Profilepicture
+                {
+                    Userid = id,
+                    Image = filebytes
+                };
+                try
+                {
+                    await _context.Profilepictures.AddAsync(NewPicture);
+                    _context.SaveChanges();
+                    return Ok();
+                }
+                catch
+                {
+                    return BadRequest();
+                }
+            }
+        }
+        else
+        {
+            return BadRequest();
+        }
+    }
+
 }
