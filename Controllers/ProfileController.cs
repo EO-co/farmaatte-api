@@ -41,7 +41,7 @@ public class ProfileController : V1ControllerBase
                 Nickname = profile.Nickname,
                 ProfilePicture = await _context.Profilepictures.Where(x => x.Userid == id).Select(x => x.Image).FirstOrDefaultAsync()
             };
-            return Ok(profile);
+            return Ok(dto);
         }
     }
 
