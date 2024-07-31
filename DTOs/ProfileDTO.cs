@@ -1,11 +1,11 @@
 
+
 namespace farmaatte_api.DTOs;
 
-public class ProfileOverviewDTO
+public class ProfileDTO
 {
-    public required int Id { get; set; }
     public required string Name { get; set; }
     public string? Nickname { get; set; }
-    public byte[]? Picture { get; set; }
+    public byte[]? ProfilePicture { get; set; }
 
 }

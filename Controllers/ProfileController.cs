@@ -1,4 +1,5 @@
 
+using farmaatte_api.DTOs;
 using farmaatte_api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -22,22 +23,26 @@ public class ProfileController : V1ControllerBase
         _logger = logger;
     }
 
-    [HttpGet("group/{id}")]
-    [Consumes("application/json")]
-    [Produces("application/json")]
-    public async Task<IActionResult> GetProfileDataOfGroup(int id)
-    {
-        var profilesInGroup = await _context.Users.Where(x => x.Groupid == id).ToListAsync();
-        return Ok(profilesInGroup);
-    }
-
     [HttpGet("{id}")]
     [Consumes("application/json")]
     [Produces("application/json")]
     public async Task<IActionResult> GetProfile(int id)
     {
         var profile = await _context.Users.FindAsync(id);
-        return Ok(profile);
+        if (profile == null)
+        {
+            return NotFound();
+        }
+        else
+        {
+            var dto = new ProfileDTO
+            {
+                Name = profile.Name,
+                Nickname = profile.Nickname,
+                ProfilePicture = await _context.Profilepictures.Where(x => x.Userid == id).Select(x => x.Image).FirstOrDefaultAsync()
+            };
+            return Ok(profile);
+        }
     }
 
     [HttpPost("picture/{id}")]
