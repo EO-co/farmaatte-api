@@ -57,6 +57,7 @@ public class LadsController : V1ControllerBase
                 var image = await _context.Profilepictures.Where(x => x.Userid == lad.Userid).Select(x => x.Image).FirstOrDefaultAsync();
                 var dto = new ProfileOverviewDTO
                 {
+                    Id = lad.Userid,
                     Name = lad.Name,
                     Nickname = lad.Nickname,
                     Picture = image
