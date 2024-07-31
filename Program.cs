@@ -67,6 +67,8 @@ app.UseCors(MyAllowSpecificOrigins);
 // We don't use this, since this is handled by nginx
 // app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();

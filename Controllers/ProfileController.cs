@@ -8,6 +8,7 @@ using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace farmaatte_api.Controllers;
 
+[Authorize]
 [Route("api/v1/[controller]")]
 public class ProfileController : V1ControllerBase
 {
@@ -20,7 +21,7 @@ public class ProfileController : V1ControllerBase
         _context = context;
         _logger = logger;
     }
-    [Authorize]
+
     [HttpGet("group/{id}")]
     [Consumes("application/json")]
     [Produces("application/json")]
@@ -30,7 +31,6 @@ public class ProfileController : V1ControllerBase
         return Ok(profilesInGroup);
     }
 
-    [Authorize]
     [HttpGet("{id}")]
     [Consumes("application/json")]
     [Produces("application/json")]
@@ -40,7 +40,6 @@ public class ProfileController : V1ControllerBase
         return Ok(profile);
     }
 
-    [AllowAnonymous]
     [HttpPost("picture/{id}")]
     public async Task<IActionResult> SaveProfilePicture([FromRoute] int id, [FromForm] IFormFile picture)
     {
