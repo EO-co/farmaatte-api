@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using farmaatte_api.SignalRHubs;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -66,5 +67,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<FiftyFiftyHub>("/fiftyFiftyHub");
 
 app.Run();
