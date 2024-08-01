@@ -79,19 +79,7 @@ public class FiftyFiftyHub : Hub
     public async Task SendLobbyOverview()  {
         var Instance = FiftyFiftySingleton.Instance;
         var Lobbies = Instance.GetLobbies();
-        var Dtos = new List<LobbyOverviewDTO>();
-        foreach (var lobby in Lobbies)
-        {
-            var dto = new LobbyOverviewDTO
-            {
-                Id = lobby.Id,
-                NumberOfPlayers = lobby.Members.Count(x => x != 0),
-                MaxPlayers = 2,
-                Status = lobby.Status
-            };
-            Dtos.Add(dto);
-        }
-        await Clients.All.SendAsync("ReceiveOverview", Dtos);
+        await Clients.All.SendAsync("ReceiveOverview", Lobbies);
     }
 
     public async void LeaveLobby(Guid LobbyId, int UserId) {
