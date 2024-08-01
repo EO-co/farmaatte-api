@@ -10,7 +10,7 @@ services:
     ports:
       - 2098:2098
     env_file:
-      - .env.example
+      - .env.local
     networks:
       - farmaatte-net
 networks:
