@@ -31,11 +31,29 @@ public class FiftyFiftyHub : Hub
     {
         Console.WriteLine("User disconnected: " + Context.ConnectionId);
         var _instance = FiftyFiftySingleton.Instance;
-        _instance.RemoveConnection(Context.ConnectionId);
+        Guid? lobbyId = _instance.RemoveConnection(Context.ConnectionId);
+        if (lobbyId != null)
+        {
+            await UpdateLobbyStatus(lobbyId);
+        }
         await Clients.All.SendAsync("UserDisconnected", $"{Context.ConnectionId} has left");
+        await SendLobbyOverview();
     }
 
-    public async Task IdentifyUser(int Id){
+    public async Task UpdateLobbyStatus(Guid? lobbyId)
+    {
+        var Instance = FiftyFiftySingleton.Instance;
+        var lobby = Instance.GetLobby(lobbyId);
+        if (lobby != null)
+        {
+            await Clients.Groups(lobbyId.ToString()).SendAsync("LobbyStatus", lobby);
+        }
+    }
+
+
+
+    public async Task IdentifyUser(int Id)
+    {
         Console.WriteLine("Joining group: " + Id);
         var _instance = FiftyFiftySingleton.Instance;
         _instance.AddConnection(Id, Context.ConnectionId);
@@ -49,7 +67,8 @@ public class FiftyFiftyHub : Hub
         await Clients.Caller.SendAsync("ReceiveOverview", Lobbies);
     }
 
-    public async Task CreateLobby(int UserId) {
+    public async Task CreateLobby(int UserId)
+    {
         var Instance = FiftyFiftySingleton.Instance;
         var lobbyId = Instance.CreateLobby(UserId);
         await AddUserToGroup(Context.ConnectionId, lobbyId);
@@ -57,18 +76,23 @@ public class FiftyFiftyHub : Hub
         await SendLobbyOverview();
     }
 
-    public async void JoinLobby(Guid LobbyId, int UserId) {
+    public async void JoinLobby(Guid LobbyId, int UserId)
+    {
         var Instance = FiftyFiftySingleton.Instance;
-        if(Instance.AddPlayerToLobby(LobbyId, UserId)) {
+        if (Instance.AddPlayerToLobby(LobbyId, UserId))
+        {
             await AddUserToGroup(Context.ConnectionId, LobbyId);
             Console.WriteLine("User " + UserId + " joined lobby " + LobbyId);
             await SendLobbyOverview();
-        } else {
+        }
+        else
+        {
             await Clients.Caller.SendAsync("LobbyFull", "Lobby is full");
         }
     }
 
-    public async Task AddUserToGroup(string ConnectionId, Guid LobbyId) {
+    public async Task AddUserToGroup(string ConnectionId, Guid LobbyId)
+    {
         var Instance = FiftyFiftySingleton.Instance;
         var Lobby = Instance.GetLobbies().FirstOrDefault(x => x.Id == LobbyId);
         await Groups.AddToGroupAsync(ConnectionId, LobbyId.ToString());
@@ -76,29 +100,36 @@ public class FiftyFiftyHub : Hub
         Console.WriteLine(ConnectionId + " added to group: " + LobbyId.ToString());
     }
 
-    public async Task SendLobbyOverview()  {
+    public async Task SendLobbyOverview()
+    {
         var Instance = FiftyFiftySingleton.Instance;
         var Lobbies = Instance.GetLobbies();
         await Clients.All.SendAsync("ReceiveOverview", Lobbies);
     }
 
-    public async void LeaveLobby(Guid LobbyId, int UserId) {
+    public async void LeaveLobby(Guid LobbyId, int UserId)
+    {
         var Instance = FiftyFiftySingleton.Instance;
-        if(Instance.RemovePlayerFromLobby(LobbyId, UserId)) {
+        if (Instance.RemovePlayerFromLobby(LobbyId, UserId))
+        {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, LobbyId.ToString());
             Console.WriteLine("User " + UserId + " left lobby " + LobbyId);
             await SendLobbyOverview();
-        } else {
+        }
+        else
+        {
             await Clients.Caller.SendAsync("LobbyEmpty", "Lobby is empty");
         }
     }
 
-    public async void MemberReady(Guid LobbyId, int UserId) {
+    public async void MemberReady(Guid LobbyId, int UserId)
+    {
         var Instance = FiftyFiftySingleton.Instance;
         var lobby = Instance.GetLobbies().FirstOrDefault(x => x.Id == LobbyId);
         if (lobby != null)
         {
-            if (lobby.MemberReadyState != null) {
+            if (lobby.MemberReadyState != null)
+            {
                 lobby.MemberReadyState[UserId] = true;
                 if (lobby.MemberReadyState.All(x => x.Value))
                 {
@@ -109,20 +140,22 @@ public class FiftyFiftyHub : Hub
         }
     }
 
-    public async void MemberUnReady(Guid LobbyId, int UserId){
+    public async void MemberUnReady(Guid LobbyId, int UserId)
+    {
         var Instance = FiftyFiftySingleton.Instance;
         var lobby = Instance.GetLobbies().FirstOrDefault(x => x.Id == LobbyId);
         if (lobby != null)
         {
-            if (lobby.MemberReadyState != null) {
+            if (lobby.MemberReadyState != null)
+            {
                 lobby.MemberReadyState[UserId] = false;
                 lobby.Status = GameStatus.TwoPlayersWaiting;
                 lobby.SetResult();
                 await Clients.Group(LobbyId.ToString()).SendAsync("LobbyStatus", lobby);
             }
         }
-
     }
+
 
 
 
